@@ -1,0 +1,67 @@
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+    depends_on:
+      - nginx
+      - church-app1
+      - church-app2
+      - church-app3
+
+  nginx:
+    image: nginx:alpine
+    container_name: webserver
+    restart: always
+    expose:
+      - "80"
+
+  church-app1:
+    image: church-app1:latest
+    container_name: church-app1
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+
+  church-app2:
+    image: church-app1:latest
+    container_name: church-app2
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+
+  church-app3:
+    image: church-app1:latest
+    container_name: church-app3
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
