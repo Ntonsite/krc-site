@@ -19,7 +19,7 @@ services:
     container_name: webserver
     restart: always
     expose:
-      - "3000"
+      - "80"
 
   church-app1:
     image: church-app1:latest
